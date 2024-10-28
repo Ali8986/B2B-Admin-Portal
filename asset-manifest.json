@@ -1,0 +1,17 @@
+{
+  "files": {
+    "main.css": "/B2B-Admin-Portal/static/css/main.55d46764.css",
+    "main.js": "/B2B-Admin-Portal/static/js/main.b5a27eed.js",
+    "static/media/Business.jpg": "/B2B-Admin-Portal/static/media/Business.1bc6c719cd3aec4a7c60.jpg",
+    "static/media/Default.jpg": "/B2B-Admin-Portal/static/media/Default.4c24354c4f037cf97d25.jpg",
+    "static/media/profile.jpg": "/B2B-Admin-Portal/static/media/profile.9442ea10e92d2f658fc7.jpg",
+    "static/media/b2b-high-resolution-logo-transparent.png": "/B2B-Admin-Portal/static/media/b2b-high-resolution-logo-transparent.e5d38eb3bb6dd3fb535f.png",
+    "index.html": "/B2B-Admin-Portal/index.html",
+    "main.55d46764.css.map": "/B2B-Admin-Portal/static/css/main.55d46764.css.map",
+    "main.b5a27eed.js.map": "/B2B-Admin-Portal/static/js/main.b5a27eed.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.55d46764.css",
+    "static/js/main.b5a27eed.js"
+  ]
+}
