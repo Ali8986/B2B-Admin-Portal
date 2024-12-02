@@ -7,7 +7,6 @@ import { useSnackbar } from "notistack";
 import { _Reset_Admin_Password } from "../../DAL/Login/ResetPassword";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { IconButton } from "@mui/material";
-import CustomInput from "../GeneralComponents/CustomTags/CustomInput";
 
 const ResetPassword = ({ size, Default, onChange, handleSnackbarClose }) => {
   const { enqueueSnackbar } = useSnackbar();
@@ -20,14 +19,14 @@ const ResetPassword = ({ size, Default, onChange, handleSnackbarClose }) => {
     confirm_password: "",
   });
 
-  const HandleShowHidePassword = (value) => {
-    if (value === "New Password") {
-      setShowPassword(!showPassword);
-    }
-    if (value === "Confirm Password") {
-      setShowConfirmPassword(!showConfirmPassword);
-    }
-  };
+  // const HandleShowHidePassword = (value) => {
+  //   if (value === "New Password") {
+  //     setShowPassword(!showPassword);
+  //   }
+  //   if (value === "Confirm Password") {
+  //     setShowConfirmPassword(!showConfirmPassword);
+  //   }
+  // };
 
   const handleChange = (field, value) => {
     setFormData({ ...formData, [field]: value });
@@ -63,6 +62,7 @@ const ResetPassword = ({ size, Default, onChange, handleSnackbarClose }) => {
       <div className="underline"></div>
       <form onSubmit={handleSubmit}>
         <FormInput
+          sx={true}
           label="Password"
           fullWidth
           type={showPassword ? "text" : "password"}
@@ -72,15 +72,16 @@ const ResetPassword = ({ size, Default, onChange, handleSnackbarClose }) => {
             endAdornment: (
               <IconButton onClick={() => setShowPassword(!showPassword)}>
                 {showPassword ? (
-                  <Visibility style={{ color: "#006599" }} />
+                  <Visibility style={{ color: "#016699" }} />
                 ) : (
-                  <VisibilityOff style={{ color: "#006599" }} />
+                  <VisibilityOff style={{ color: "#016699" }} />
                 )}
               </IconButton>
             ),
           }}
         />
         <FormInput
+          sx={true}
           label="Confirm Password*"
           type={showConfirmPassword ? "text" : "password"}
           value={formData.confirm_password}
@@ -94,9 +95,9 @@ const ResetPassword = ({ size, Default, onChange, handleSnackbarClose }) => {
                 onClick={() => setShowConfirmPassword(!showConfirmPassword)}
               >
                 {showConfirmPassword ? (
-                  <Visibility style={{ color: "#006599" }} />
+                  <Visibility style={{ color: "#016699" }} />
                 ) : (
-                  <VisibilityOff style={{ color: "#006599" }} />
+                  <VisibilityOff style={{ color: "#016699" }} />
                 )}
               </IconButton>
             ),

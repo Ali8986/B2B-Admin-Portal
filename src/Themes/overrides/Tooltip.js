@@ -5,7 +5,7 @@ export default function Tooltip(theme) {
     MuiTooltip: {
       styleOverrides: {
         tooltip: {
-          backgroundColor: theme.palette.grey[800],
+          backgroundColor: "#016699",
         },
         arrow: {
           color: theme.palette.grey[800],

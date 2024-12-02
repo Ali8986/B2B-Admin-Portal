@@ -45,6 +45,7 @@ const ForgetForm = ({ Default, handleOtp }) => {
       <div className="Forget-Email">
         <form onSubmit={handleSubmit} noValidate>
           <FormInput
+            sx={true}
             label="Email"
             type="email"
             value={email}

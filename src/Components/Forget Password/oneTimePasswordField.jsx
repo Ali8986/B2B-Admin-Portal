@@ -50,7 +50,7 @@ const OTP = ({ Default, Confirm }) => {
               "& .MuiOutlinedInput-root": {
                 "& fieldset": {
                   borderRadius: "0px",
-                  borderColor: "#006599", // Desired border color
+                  borderColor: "#016699", // Desired border color
                 },
                 "&:hover fieldset": {
                   borderRadius: "0px",
@@ -71,7 +71,7 @@ const OTP = ({ Default, Confirm }) => {
             href="#home"
             className="Back-To-Login"
             onClick={handleClick}
-            style={{ color: "#006599" }}
+            style={{ color: "#016699" }}
           >
             Back to Login
           </a>

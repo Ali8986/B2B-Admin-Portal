@@ -10,6 +10,7 @@ import { s3baseUrl } from "../../config/config";
 import PhoneInput from "react-phone-number-validation";
 import { Edit_Profile_Settings } from "../../DAL/Edit_Profile/Profile";
 import Iconify from "../GeneralComponents/Iconify";
+import { useUserData } from "../../Hooks/App_Context";
 
 const StyledAvatar = styled(Avatar)({
   width: "100px",
@@ -19,6 +20,7 @@ const StyledAvatar = styled(Avatar)({
 });
 
 const EditProfile = () => {
+  const { setUserData } = useUserData();
   const { profileImage, setProfileImage } = useContext(ProfileImageContext);
   const UserData = JSON.parse(localStorage.getItem("UserData"));
   // eslint-disable-next-line
@@ -66,6 +68,7 @@ const EditProfile = () => {
         s3baseUrl + response?.employee?.profile_pic?.small
       );
       setProfileImage(s3baseUrl + response?.employee?.profile_pic?.small);
+      setUserData(response?.employee);
       setLoading(false);
     } else {
       enqueueSnackbar(response.message, { variant: "error" });
@@ -127,7 +130,7 @@ const EditProfile = () => {
                         icon={"wpf:name"}
                         width={20}
                         height={20}
-                        color={"#006599"}
+                        color={"#016699"}
                       />
                     ),
                   }}
@@ -149,7 +152,7 @@ const EditProfile = () => {
                         icon={"wpf:name"}
                         width={20}
                         height={20}
-                        color={"#006599"}
+                        color={"#016699"}
                       />
                     ),
                   }}

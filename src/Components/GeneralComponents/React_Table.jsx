@@ -24,7 +24,7 @@ const ReactDataTable = ({
         theme_config={{
           background: "white",
           color: "black",
-          iconColor: "#006599",
+          iconColor: "#016699",
         }}
         is_sticky_header={is_sticky_header}
         is_hide_footer_pagination={is_hide_footer_pagination}

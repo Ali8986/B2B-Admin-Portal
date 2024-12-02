@@ -7,7 +7,7 @@ import Iconify from "../GeneralComponents/Iconify";
 import { useMemo } from "react";
 
 const getIcon = (name) => (
-  <Iconify icon={name} width={25} height={25} color={"#006599"} />
+  <Iconify icon={name} width={25} height={25} color={"#016699"} />
 );
 
 export const useNavOptions = () => {

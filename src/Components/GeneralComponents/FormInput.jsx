@@ -31,15 +31,15 @@ const FormInput = ({
       sx={{
         "& .MuiOutlinedInput-root": {
           "& fieldset": {
-            color: sx ? "grey" : "#006599",
-            borderColor: sx ? "gray" : "#006599", // Desired border color
+            color: sx ? "grey" : "#016699",
+            borderColor: sx ? "gray" : "#016699", // Desired border color
           },
         },
         input: sx && {
           fontSize: "1rem",
         },
         label: {
-          color: sx ? "" : "#006599",
+          color: sx ? "" : "#016699",
         },
       }}
     />

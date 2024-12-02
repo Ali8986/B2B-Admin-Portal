@@ -118,7 +118,7 @@ function HomePage() {
           <CircularProgress />
         </div>
       ) : (
-        <div className="py-4 px-3" style={{ minHeight: "100vh" }}>
+        <div className="py-4 px-4" style={{ minHeight: "100vh" }}>
           {/* Header Section */}
           <div className="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
             <h4 className="mb-0 text-dark col-sm-12 col-md-8 fw-normal">
@@ -146,13 +146,13 @@ function HomePage() {
             <div className="row col-sm-12 col-lg-9 g-3 mt-0">
               {stats.map((stat, index) => (
                 <div
-                  className={`col-12 col-md-6 col-lg-4 ${
+                  className={`col-12 col-md-6 col-lg-4 card-main ${
                     index <= 2 ? "mt-sm-3 mt-lg-0" : ""
                   }`}
                   key={index}
                 >
                   <div
-                    className={`custom-card text-white d-flex flex-wrap align-items-center p-3 h-100 justify-content-between rounded-3`}
+                    className={`custom-card text-white d-flex flex-wrap align-items-center p-3 h-100 justify-content-between rounded-3 cards`}
                     style={{
                       backgroundColor: stat.color,
                     }}

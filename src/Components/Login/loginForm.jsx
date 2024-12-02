@@ -1,4 +1,4 @@
-import { Button } from "@mui/material";
+import { Button, Tooltip } from "@mui/material";
 import React, { useContext, useState } from "react";
 import IconButton from "@mui/material/IconButton";
 import Visibility from "@mui/icons-material/Visibility";
@@ -46,18 +46,6 @@ const LoginForm = ({ Forget }) => {
       localStorage.setItem("UserImage", s3baseUrl + Profile_Image);
       localStorage.setItem("token", response.token);
       localStorage.setItem("UserId", response.user._id);
-      // localStorage.setItem(
-      //   "UserData",
-      //   JSON.stringify({
-      //     first_name: response?.user?.first_name,
-      //     last_name: response?.user?.last_name,
-      //     employee_id: response?.user?._id,
-      //     address: response?.user?.address,
-      //     contact_number: response?.user?.contact_number,
-      //     full_name: response.user.full_name,
-      //     email: response.user.email,
-      //   })
-      // );
       enqueueSnackbar(response.message, { variant: "success" });
       navigate("/dashboard");
       setLoading(false);
@@ -84,17 +72,21 @@ const LoginForm = ({ Forget }) => {
             fullWidth
             type="email"
             value={email}
+            sx={true}
             onChange={(e) => setEmail(e.target.value)}
             InputProps={{
               endAdornment: (
-                <IconButton>
-                  <MailLockIcon style={{ color: "#006599" }} />
-                </IconButton>
+                <Tooltip title="Enter Your Email in the Field" arrow>
+                  <IconButton>
+                    <MailLockIcon style={{ color: "#016699" }} />
+                  </IconButton>
+                </Tooltip>
               ),
             }}
           />
         </div>
         <FormInput
+          sx={true}
           label="Password"
           fullWidth
           type={showPassword ? "text" : "password"}
@@ -102,13 +94,20 @@ const LoginForm = ({ Forget }) => {
           onChange={(e) => setPassword(e.target.value)}
           InputProps={{
             endAdornment: (
-              <IconButton onClick={() => setShowPassword(!showPassword)}>
-                {showPassword ? (
-                  <Visibility style={{ color: "#006599" }} />
-                ) : (
-                  <VisibilityOff style={{ color: "#006599" }} />
-                )}
-              </IconButton>
+              <Tooltip
+                title={showPassword ? "Hide Password" : "Show Password"}
+                enterDelay={500}
+                leaveDelay={200}
+                arrow
+              >
+                <IconButton onClick={() => setShowPassword(!showPassword)}>
+                  {showPassword ? (
+                    <Visibility style={{ color: "#016699" }} />
+                  ) : (
+                    <VisibilityOff style={{ color: "#016699" }} />
+                  )}
+                </IconButton>
+              </Tooltip>
             ),
           }}
         />
@@ -116,7 +115,7 @@ const LoginForm = ({ Forget }) => {
           <Button
             variant="text"
             onClick={Forget}
-            style={{ fontSize: "0.9rem", color: "#1976D2" }}
+            style={{ fontSize: "0.9rem", color: "#016699" }}
           >
             Forgot Password?
           </Button>
