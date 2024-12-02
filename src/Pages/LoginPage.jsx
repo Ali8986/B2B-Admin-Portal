@@ -1,25 +1,23 @@
-import AdminImage from "../Assets/Images/Business.jpg";
+import React from "react";
 import ComponentState from "../Components/Login/switching";
+import SideImage from "../Assets/Images/Login_Left.png";
 
 const LoginPage = () => {
   return (
-    <div className="container-Fluid overflow-hidden">
-      <div className="row g-0">
-        <div className="col-12 col-md-12 col-lg-4">
-          <div className="p-3 p-md-5 d-flex flex-column hv-100 justify-content-center">
-            <ComponentState />
-          </div>
+    <div className="login-page-container">
+      <div className="background-image">
+        <div className="overlay"></div>
+      </div>
+      <div className="form-container">
+        <div className="login-form-section col-4">
+          <ComponentState />
         </div>
-        <div className="col-12 col-md-12 col-lg-8">
-          <div
-            className="d-none d-lg-block"
-            style={{
-              backgroundImage: `url(${AdminImage})`,
-              backgroundSize: "cover",
-              backgroundPosition: "center center",
-              height: "100vh",
-            }}
-          ></div>
+        <div className="image-section d-none d-md-block col-8">
+          <img
+            src={SideImage}
+            alt="login-page-right"
+            className="img-fluid side-image"
+          />
         </div>
       </div>
     </div>

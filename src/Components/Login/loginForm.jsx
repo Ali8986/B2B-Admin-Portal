@@ -1,27 +1,29 @@
-import { Button, TextField } from "@mui/material";
-import React, { useState } from "react";
+import { Button } from "@mui/material";
+import React, { useContext, useState } from "react";
 import IconButton from "@mui/material/IconButton";
-import ContactMailIcon from "@mui/icons-material/ContactMail";
-import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import Visibility from "@mui/icons-material/Visibility";
-import LockResetIcon from "@mui/icons-material/LockReset";
 import { useNavigate } from "react-router-dom";
-import FormBox from "../GeneralComponents/Form-Box";
 import LogoBox from "../GeneralComponents/Logo-Box";
-import { login } from "../../DAL/Login/Login"; // Import the login API function
 import { useSnackbar } from "notistack";
+import { Login } from "../../DAL/Login/Auth";
+import { VisibilityOff } from "@mui/icons-material";
 import LoadingButton from "../GeneralComponents/buttonLoadingState";
+import MailLockIcon from "@mui/icons-material/MailLock";
+import { ProfileImageContext } from "../../Hooks/App_Context";
+import { s3baseUrl } from "../../config/config";
+import { useSidebarStatus } from "../../Hooks/App_Context";
+import FormInput from "../GeneralComponents/FormInput";
 
 const LoginForm = ({ Forget }) => {
+  const { updateData } = useSidebarStatus();
+  const { setProfileImage } = useContext(ProfileImageContext);
   const [loading, setLoading] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+
   const { enqueueSnackbar } = useSnackbar();
   const navigate = useNavigate();
-  const HandleShowHidePassword = () => {
-    setShowPassword(!showPassword);
-  };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -29,82 +31,119 @@ const LoginForm = ({ Forget }) => {
     const formData = {
       email,
       password,
-      user_type: "admin",
     };
     setLoading(true);
-    const response = await login(formData);
+    const response = await Login(formData);
     if (response.code === 200) {
+      updateData({
+        privileges: response?.previllages,
+        sidebar_status: response?.user?.sidebar_status,
+        role: response?.user?.role,
+        employee_data: response?.user,
+      });
+      const Profile_Image = response.user.profile_pic.small;
+      setProfileImage(s3baseUrl + Profile_Image);
+      localStorage.setItem("UserImage", s3baseUrl + Profile_Image);
       localStorage.setItem("token", response.token);
-      localStorage.setItem("Email", JSON.stringify(email));
+      localStorage.setItem("UserId", response.user._id);
+      // localStorage.setItem(
+      //   "UserData",
+      //   JSON.stringify({
+      //     first_name: response?.user?.first_name,
+      //     last_name: response?.user?.last_name,
+      //     employee_id: response?.user?._id,
+      //     address: response?.user?.address,
+      //     contact_number: response?.user?.contact_number,
+      //     full_name: response.user.full_name,
+      //     email: response.user.email,
+      //   })
+      // );
       enqueueSnackbar(response.message, { variant: "success" });
       navigate("/dashboard");
+      setLoading(false);
     } else {
       setLoading(false);
       enqueueSnackbar(response.message, { variant: "error" });
     }
   };
-
   return (
-    <FormBox>
+    <div className="login-form text-center">
       <LogoBox />
-      <div className="heading-text py-2 mt-3">
-        <h2>Login</h2>
+      <div>
+        <h2 style={{ fontWeight: 700, margin: "1.5rem 0" }}>Welcome Back</h2>
       </div>
-      <div className="underline"></div>
+      <div>
+        <p style={{ color: "#666", marginBottom: "2rem" }}>
+          Sign in to continue
+        </p>
+      </div>
       <form onSubmit={handleSubmit}>
-        <div className="mt-2">
-          <TextField
-            className="my-2"
-            autoComplete="username"
+        <div>
+          <FormInput
             label="Email"
+            fullWidth
             type="email"
             value={email}
-            fullWidth
             onChange={(e) => setEmail(e.target.value)}
-            required
-            InputProps={{
-              endAdornment: <ContactMailIcon />,
-            }}
-          />
-          <TextField
-            className="my-2"
-            autoComplete="current-password"
-            label="Password"
-            type={showPassword ? "text" : "password"}
-            fullWidth
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
             InputProps={{
               endAdornment: (
-                <IconButton onClick={HandleShowHidePassword}>
-                  {showPassword ? <Visibility /> : <VisibilityOffIcon />}
+                <IconButton>
+                  <MailLockIcon style={{ color: "#006599" }} />
                 </IconButton>
               ),
             }}
           />
         </div>
-        <div className="text-end w-100">
+        <FormInput
+          label="Password"
+          fullWidth
+          type={showPassword ? "text" : "password"}
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          InputProps={{
+            endAdornment: (
+              <IconButton onClick={() => setShowPassword(!showPassword)}>
+                {showPassword ? (
+                  <Visibility style={{ color: "#006599" }} />
+                ) : (
+                  <VisibilityOff style={{ color: "#006599" }} />
+                )}
+              </IconButton>
+            ),
+          }}
+        />
+        <div className="Forget_Pass_Button mb-1 p-0">
           <Button
             variant="text"
-            className="text-decoration-underline"
             onClick={Forget}
-            startIcon={<LockResetIcon />}
+            style={{ fontSize: "0.9rem", color: "#1976D2" }}
           >
-            Forget Password?
+            Forgot Password?
           </Button>
         </div>
-        <LoadingButton
-          type="submit"
-          size="large"
-          variant="contained"
-          className="Loading-BTN mt-3"
-          isLoading={loading}
-        >
-          Login
-        </LoadingButton>
+        {loading ? (
+          <LoadingButton
+            type="submit"
+            size="large"
+            variant="contained"
+            fullWidth
+            isLoading={loading}
+          >
+            Login
+          </LoadingButton>
+        ) : (
+          <Button
+            variant="contained"
+            size="large"
+            fullWidth
+            type="submit"
+            disabled={loading}
+          >
+            Login
+          </Button>
+        )}
       </form>
-    </FormBox>
+    </div>
   );
 };
 

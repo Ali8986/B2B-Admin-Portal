@@ -1,107 +1,102 @@
-/* Global CSS */
-body {
-    font-family: Poppins, sans-serif;
-    margin: 0;
-    padding: 0;
+/* Main container */
+.login-page-container {
+    position: relative;
+    width: 100%;
     height: 100vh;
-    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
 }
 
-.login-form {
-    margin: 0px auto;
-    border-radius: 15px;
-    max-width: 450px;
+/* Background image */
+.background-image {
+    position: absolute;
+    top: 0;
+    left: 0;
     width: 100%;
-    text-align: center;
-    animation: fadeIn 1.2s ease-in-out;
-    position: relative;
-    min-height: 400px;
+    height: 100%;
+    background-image: url('../Images/background.jpg');
+    background-size: cover;
+    background-position: center;
+    filter: blur(3px);
+    z-index: -1;
 }
 
-.heading-text h2 {
-    font-size: 29px;
-    font-weight: 400;
-    color: #333;
-    /* Changed to theme's text primary color */
-    margin-bottom: 10px;
-    position: relative;
-    z-index: 1;
+/* Overlay with blur effect */
+.overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.8);
+    /* White semi-transparent overlay */
+    z-index: -1;
 }
 
-.underline {
-    display: none;
-    width: 80px;
-    height: 4px;
-    background-color: #556cd6;
-    /* Changed to theme's primary dark */
-    margin: 0 auto 20px auto;
-    border-radius: 4px;
-    z-index: 1;
-}
-
-.MuiOutlinedInput-root {
-    border-radius: 10px;
-}
-
-.MuiButton-contained {
-    background: #7396cc !important;
-    /* Theme's primary main */
+.otp-input div {
+    border-radius: 0px;
+    font-weight: 700;
+    font-size: 12px;
     color: white;
-    font-size: 16px;
-    padding: 10px 0;
-    border-radius: 10px;
-    box-shadow: 0 4px 12px rgba(255, 140, 0, 0.4);
-    /* Maintained original shadow */
-    transition: all 0.3s ease-in-out;
+    background-color: #00669931;
 }
 
-.MuiButton-contained:hover {
-    background: #7c97c1 !important;
-    /* Theme's primary light */
-    box-shadow: 0 6px 16px rgba(255, 87, 34, 0.5);
-    /* Kept hover shadow */
+.Input_Textfield {
+    outline: 1px solid rgba(128, 128, 128, 0.356);
+    border-radius: 4px;
 }
 
-.MuiSvgIcon-root {
-    color: #7396cc !important;
-    /* Theme's primary main */
-}
-
-@media (max-width: 768px) {
-    .login-form {
-        max-width: 95%;
-        min-height: auto;
-    }
-}
-
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(-30px);
-    }
-
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-.icon {
-    width: 200px;
-    height: 100px;
-}
-
-.css-1lzspe0-MuiSvgIcon-root {
-    color: white !important;
-    /* Kept white for special icons */
-}
-
-.Forget-Email {
+/* Form container */
+.form-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
     width: 100%;
+    height: 100%;
+    padding: 2rem;
+    z-index: 1;
 }
 
-.Back-To-Login {
-    color: grey;
+.Forget_Pass_Button {
+    float: right;
+}
+
+/* Left side (login form) */
+.login-form-section {
+    flex: 1;
+    max-width: 100%;
+    z-index: 1;
+    /* background: rgba(255, 255, 255, 0.85); */
+    /* Semi-transparent white */
+    border-radius: 8px;
+    padding: 2rem;
+    /* box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1); */
+}
+
+/* Right side (image) */
+.image-section {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1;
+}
+
+.Profile_Phone_Input {
+    margin-top: 13px;
+    border-radius: 8px !important;
+    margin-bottom: 8px;
+    border-color: #006599 !important;
+    background-color: transparent !important;
+}
+
+/* Side image */
+.side-image {
+    width: 100%;
+    max-width: 500px;
+    object-fit: cover;
 }
 
 .Dashboard-layout-container {
@@ -110,12 +105,15 @@ body {
 }
 
 .App-bar {
+    height: 70px;
     padding: 20px;
     flex-direction: row !important;
     justify-content: space-between;
     align-items: center;
     background-color: white !important;
+    box-shadow: none !important;
 }
+
 
 .App-header-icon-menu {
     width: 25px;
@@ -147,7 +145,7 @@ body {
 
 @media (min-width: 769px) {
     .App-header-icon-menu {
-        visibility: hidden !important;
+        display: none !important;
     }
 }
 
@@ -158,29 +156,31 @@ body {
 }
 
 .active-tab {
-    background-color: #7c96c15b !important;
+    border-left: 4px solid #006599;
+    background-color: #0066991c !important;
     /* Transparent version of primary light */
     color: black !important;
 }
 
-.active-tab svg {
+/* .active-tab svg {
     color: black !important;
-}
+} */
 
 .Search-Bar {
-    margin: 5px auto;
+    display: flex !important;
+    justify-content: center !important;
 }
 
 .InputSearch {
     max-width: 100%;
     width: 320px;
-    border-radius: 20px;
-    border: 1px solid #00000033;
+    border-radius: 6px;
+    border: 1px solid #006599;
     /* Kept subtle border */
 }
 
 .Main-Search-bar {
-    margin: 0px !important;
+    margin: 0px auto !important;
     padding: 0px 0px;
 }
 
@@ -189,7 +189,7 @@ body {
 }
 
 .side-bar-btn {
-    padding: 10px 40px !important;
+    padding: 10px 20px !important;
 }
 
 .hv-100 {
@@ -201,7 +201,7 @@ body {
     color: white;
     top: 10px;
     position: absolute;
-    background-color: #7396cc;
+    background-color: #006599;
     width: 30px;
     line-height: 30px;
     text-align: center;
@@ -215,9 +215,7 @@ body {
     color: black;
 }
 
-.main-modal {
-    position: relative;
-}
+/* .main-modal {} */
 
 .Profile-DropDown .css-99wn1p-MuiList-root-MuiMenu-list {
     width: 245px !important;
@@ -235,8 +233,8 @@ body {
 .Profile-Image-Change {
     cursor: pointer;
     position: absolute;
-    top: -92px;
-    left: 52px;
+    top: 75px;
+    left: 47px;
 }
 
 .Position_update {
@@ -805,3 +803,243 @@ body {
 input:disabled {
     -webkit-text-fill-color: black !important;
 } */
+
+
+.profile-container {
+    align-items: center;
+    background-color: #f8f8f8;
+    border-radius: 10px;
+    cursor: pointer;
+    display: flex;
+    padding: 5px;
+    position: relative;
+}
+
+.profile-avatar {
+    margin-right: 10px;
+}
+
+.profile-info {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    justify-content: center;
+}
+
+.user-name {
+    color: #0f0f12;
+    font-size: 13px;
+    font-weight: 700;
+    margin-bottom: -1px;
+    white-space: nowrap;
+}
+
+.user-role {
+    color: #acacac;
+    font-size: 12px;
+}
+
+.pointer {
+    transition: all 0.2s ease-in-out;
+    color: #0f0f12;
+    font-size: 10px;
+    font-weight: 700;
+    margin-left: 20px !important;
+    margin-right: 5px !important;
+    cursor: pointer;
+}
+
+.chevron-icon {
+    transform: rotate(0deg);
+}
+
+.chevron-icon-0 {
+    transform: rotate(180deg);
+}
+
+.Profile_Icon {
+    font-size: 12px;
+    color: #006599;
+}
+
+/* Start CSS for Progress Card in the Dashboard */
+
+
+.worker-progress-card {
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+}
+
+.progress-container {
+    position: relative;
+}
+
+.progress-label {
+    font-weight: bold;
+    color: #333;
+}
+
+.progress-circle-wrapper {
+    position: relative;
+    width: 120px;
+    height: 120px;
+    margin: 0 auto;
+}
+
+.progress-circle {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    background: conic-gradient(#006599 var(--progress-value), #ddd 0);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+}
+
+.progress-inner {
+    position: absolute;
+    width: 80%;
+    height: 80%;
+    border-radius: 50%;
+    background-color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.progress-value {
+    font-size: 18px;
+    font-weight: bold;
+    color: #006599;
+}
+
+.progress-value span {
+    font-size: 14px;
+}
+
+.btn.link-primary {
+    color: #007bff;
+    text-decoration: underline;
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+.btn.link-primary:hover {
+    color: #0056b3;
+}
+
+.icon-section {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 45px;
+    height: 45px;
+    border-radius: 8px;
+}
+
+.stat-count {
+    font-weight: bold;
+    font-size: 18px;
+}
+
+.stat-title {
+    margin: 0px !important;
+    font-family: Montserrat, sans-serif !important;
+    font-weight: 400 !important;
+    font-size: 15px !important;
+    line-height: 1.75 !important;
+    opacity: 1 !important;
+}
+
+/* END CSS for Progress Card in the Dashboard */
+
+
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+    width: 4px;
+    /* Set the scrollbar width */
+    height: 5px;
+    /* Set the scrollbar height for horizontal scrollbars */
+}
+
+::-webkit-scrollbar-track {
+    background: #f0f0f0;
+    /* Background of the track */
+    border-radius: 5px;
+    /* Rounded edges for the track */
+}
+
+::-webkit-scrollbar-thumb {
+    background: #00669930;
+    /* Color of the scrollbar thumb */
+    border-radius: 5px;
+    /* Rounded edges for the thumb */
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #00669930;
+    /* Color of the scrollbar thumb on hover */
+}
+
+/* Styling Data Table Css */
+
+/* Styling for Table Headings */
+.Data_Table .responsive-table-pro thead tr th {
+    font-size: 16px;
+    font-weight: 600;
+    color: #333;
+    text-transform: capitalize;
+}
+
+/* Styling for Table Content */
+.Data_Table .responsive-table-pro tbody tr td {
+    font-size: 14px;
+    font-weight: 400;
+    text-transform: capitalize;
+    color: black;
+}
+
+.Data_Table {
+    box-shadow: none;
+    border: none !important;
+}
+
+
+.table_text {
+    border-bottom: 1px solid #dadadada;
+}
+
+.main_table {
+    border: 1px solid #dadadada;
+    border-radius: 7px;
+    box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 2px 6px 2px;
+}
+
+.table_Title {
+    font-size: 16px;
+    font-weight: 600;
+    color: #333;
+    text-transform: capitalize;
+}
+
+.Menu_List_Text span {
+    color: #006599;
+    font-size: 1rem !important;
+}
+
+.Top_Bar_Heading {
+    font-size: 18px;
+    font-weight: 500;
+    color: #333;
+    text-transform: capitalize;
+}
+
+.Profile-Icon-Link {
+    font-size: 14px;
+    font-weight: normal;
+}

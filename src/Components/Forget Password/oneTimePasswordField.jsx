@@ -2,9 +2,9 @@ import { useState } from "react";
 import FormBox from "../GeneralComponents/Form-Box";
 import { MuiOtpInput } from "mui-one-time-password-input";
 import LogoBox from "../GeneralComponents/Logo-Box";
-import { confirmPinCode } from "../../DAL/Login/Login";
 import LoadingButton from "../GeneralComponents/buttonLoadingState";
 import { useSnackbar } from "notistack";
+import { _Code_Verification } from "../../DAL/Login/Auth";
 
 const OTP = ({ Default, Confirm }) => {
   const { enqueueSnackbar } = useSnackbar();
@@ -22,10 +22,9 @@ const OTP = ({ Default, Confirm }) => {
     const formData = {
       email,
       verification_code: otp,
-      user_type: "admin",
     };
     setLoading(true);
-    const response = await confirmPinCode(formData);
+    const response = await _Code_Verification(formData);
     if (response && response.code === 200) {
       enqueueSnackbar(response.message, { variant: "success" });
       Confirm();
@@ -38,8 +37,8 @@ const OTP = ({ Default, Confirm }) => {
     <form onSubmit={handleSubmit}>
       <FormBox>
         <LogoBox />
-        <div className="heading-text">
-          <h2 className="text-decoration-underline">Email Verification Code</h2>
+        <div className="heading-text mt-3">
+          <h2 className="fs-3">Email Verification Code</h2>
           <p>We have sent a code to your email</p>
         </div>
         <div>
@@ -47,12 +46,33 @@ const OTP = ({ Default, Confirm }) => {
             value={otp}
             TextFieldsProps={() => ({ size: "small" })}
             onChange={handleChange}
+            sx={{
+              "& .MuiOutlinedInput-root": {
+                "& fieldset": {
+                  borderRadius: "0px",
+                  borderColor: "#006599", // Desired border color
+                },
+                "&:hover fieldset": {
+                  borderRadius: "0px",
+                  borderColor: "#004c80", // Border color on hover
+                },
+                "&.Mui-focused fieldset": {
+                  borderRadius: "0px",
+                  borderColor: "#002c50", // Border color when focused
+                },
+              },
+            }}
             className="my-2 px-4 otp-input"
             length={6}
           />
         </div>
         <div className="text-end w-100 px-4 py-0 my-0">
-          <a href="#home" className="Back-To-Login" onClick={handleClick}>
+          <a
+            href="#home"
+            className="Back-To-Login"
+            onClick={handleClick}
+            style={{ color: "#006599" }}
+          >
             Back to Login
           </a>
         </div>

@@ -4,7 +4,7 @@ import SearchAppBar from "../../Components/GeneralComponents/searchBar";
 import Logo from "../../Components/SideBar/SideBarLogo";
 import SidebarOption from "../../Components/SideBar/SideBarOptions";
 import SidebarSubMenu from "../../Components/SideBar/SideBarSubMenu";
-import { options } from "../../Components/SideBar/SideBarConfig";
+import { useNavOptions } from "../../Components/SideBar/SideBarConfig";
 
 const AppSidebar = ({
   drawerWidth,
@@ -12,16 +12,20 @@ const AppSidebar = ({
   mobileOpen,
   handleDrawerClose,
 }) => {
-  const [openSubmenus, setOpenSubmenus] = useState(() => {
-    const storedValue = localStorage.getItem("openSubmenus");
-    return storedValue ? JSON.parse(storedValue) : {};
-  });
+  const [isHovered, setIsHovered] = useState(false);
+  const [openSubmenus, setOpenSubmenus] = useState({});
   const [searchInput, setSearchInput] = useState("");
   const [filteredResults, setFilteredResults] = useState([]);
+
+  const options = useNavOptions();
+
+  const generateKey = (title) =>
+    title.trim().toLowerCase().replace(/\s+/g, "_");
 
   const handleSearchChange = (event) => {
     const query = event.target.value.toLowerCase();
     setSearchInput(query);
+
     const results = options
       .map((item) => {
         if (item.title.toLowerCase().includes(query)) {
@@ -36,18 +40,15 @@ const AppSidebar = ({
         return null;
       })
       .filter(Boolean);
+
     setFilteredResults(results);
   };
 
   const handleSubmenuToggle = (key) => {
-    setOpenSubmenus((prevOpenSubmenus) => {
-      const newOpenSubmenus = {
-        ...prevOpenSubmenus,
-        [key]: !prevOpenSubmenus[key],
-      };
-      localStorage.setItem("openSubmenus", JSON.stringify(newOpenSubmenus));
-      return newOpenSubmenus;
-    });
+    setOpenSubmenus((prevOpenSubmenus) => ({
+      ...prevOpenSubmenus,
+      [key]: !prevOpenSubmenus[key],
+    }));
   };
 
   const handleMobileViewChange = () => {
@@ -55,7 +56,11 @@ const AppSidebar = ({
   };
 
   const drawerContent = (
-    <>
+    <div
+      className={`custom-scrollbar ${isHovered ? "hovered" : ""}`}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+    >
       <Logo />
       <div className="Search-Bar">
         <SearchAppBar
@@ -67,33 +72,46 @@ const AppSidebar = ({
       <Divider className="divider" />
       <List className="Main-Menu-list">
         {(filteredResults.length === 0 ? options : filteredResults).map(
-          (option) =>
-            option.children ? (
+          (option) => {
+            const key = generateKey(option.title);
+            return option.children ? (
               <SidebarSubMenu
-                key={option.title}
+                key={key}
                 option={option}
-                isOpen={!!openSubmenus[option.title]}
-                handleToggle={() => handleSubmenuToggle(option.title)}
+                isOpen={!!openSubmenus[key]}
+                handleToggle={() => handleSubmenuToggle(key)}
                 handleMobileViewChange={handleMobileViewChange}
               />
             ) : (
               <SidebarOption
-                key={option.title}
+                key={key}
                 option={option}
                 handleMobileViewChange={handleMobileViewChange}
               />
-            )
+            );
+          }
         )}
       </List>
-    </>
+    </div>
   );
 
   useEffect(() => {
-    const storedOpenSubmenus = localStorage.getItem("openSubmenus");
-    if (storedOpenSubmenus !== null) {
-      setOpenSubmenus(JSON.parse(storedOpenSubmenus));
+    // Automatically open submenus containing matching children
+    if (searchInput.trim() === "") {
+      setOpenSubmenus({}); // Reset open submenus when search is cleared
+      return;
     }
-  }, []);
+
+    const newOpenSubmenus = {};
+    filteredResults.forEach((item) => {
+      if (item.children && item.children.length > 0) {
+        const key = generateKey(item.title);
+        newOpenSubmenus[key] = true; // Open all submenus with matching children
+      }
+    });
+
+    setOpenSubmenus(newOpenSubmenus);
+  }, [filteredResults, searchInput]);
 
   return (
     <div

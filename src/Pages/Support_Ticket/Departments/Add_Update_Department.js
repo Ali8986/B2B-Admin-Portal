@@ -64,10 +64,7 @@ function AddOrUpdateDepartment({ type }) {
     if (!formData.status) {
       errors.push("Status");
     }
-    console.log(
-      formData.description,
-      "formData.descriptionformData.descriptionformData.description"
-    );
+
     if (!formData.description) {
       errors.push("Description");
     }
@@ -106,7 +103,6 @@ function AddOrUpdateDepartment({ type }) {
 
   useEffect(() => {
     if (state) {
-      console.log(state, "State is active sakldsakjlksjlk");
       handleFormateData(state);
     } else if (type === Update_Department) {
       // eslint-disable-next-line
@@ -117,34 +113,34 @@ function AddOrUpdateDepartment({ type }) {
   return (
     <>
       {loading ? (
-        <div className='d-flex justify-content-center align-items-center circular_progress_bar '>
+        <div className="d-flex justify-content-center align-items-center circular_progress_bar ">
           <CircularProgress />
         </div>
       ) : (
-        <div className='px-3 px-md-4 py-1 py-md-3'>
+        <div className="px-3 px-md-4 py-1 py-md-3">
           <form onSubmit={handleSubmit}>
-            <div className='row p-0 p-lg-3 mt-5 mt-md-2'>
+            <div className="row p-0 p-lg-3 mt-5 mt-md-2">
               <HeaderWithBackButton
                 title={
                   type === Update_Department
                     ? "Edit Department"
                     : "Add Department"
                 }
-                path='/departments'
+                path="/departments"
               />
-              <div className='col-6 col-lg-6'>
+              <div className="col-6 col-lg-6">
                 <FormInput
-                  label='Department Name*'
-                  variant='outlined'
-                  name='name'
+                  label="Department Name*"
+                  variant="outlined"
+                  name="name"
                   value={formData.name}
                   onChange={handleInputChange}
                   required={false}
                 />
               </div>
-              <div className='col-12 col-lg-6 d-flex flex-column justify-content-center'>
+              <div className="col-12 col-lg-6 d-flex flex-column justify-content-center">
                 <Select
-                  name='status'
+                  name="status"
                   value={formData.status}
                   onChange={handleInputChange}
                 >
@@ -154,35 +150,35 @@ function AddOrUpdateDepartment({ type }) {
                   <MenuItem value={false}>Inactive</MenuItem>
                 </Select>
               </div>
-              <div className='col-12 mt-2'>
+              <div className="col-12 mt-2">
                 <ReactEditorComponent
                   value={formData.description}
                   onChange={(value) =>
                     handleEditorChange(value, formData.description)
                   }
-                  attributeLabel='Description'
+                  attributeLabel="Description"
                   attributeState={true}
                 />
               </div>
-              <div className='col-12 d-flex flex-wrap justify-content-end mt-3'>
+              <div className="col-12 d-flex flex-wrap justify-content-end mt-3">
                 <Button
-                  type='submit'
-                  variant='contained'
-                  color='primary'
-                  size='large'
+                  type="submit"
+                  variant="contained"
+                  color="primary"
+                  size="large"
                   disabled={loading}
                   style={{ backgroundColor: "#7396CC" }}
                 >
                   {loading ? (
                     type === Update_Department ? (
-                      <div className='d-flex align-items-center'>
-                        <CircularProgress size={15} className='color' />
-                        <p className='ms-2 mb-0 font-size'>Update</p>
+                      <div className="d-flex align-items-center">
+                        <CircularProgress size={15} className="color" />
+                        <p className="ms-2 mb-0 font-size">Update</p>
                       </div>
                     ) : (
-                      <div className='d-flex align-items-center'>
-                        <CircularProgress size={15} className='color' />
-                        <p className='ms-2 mb-0 font-size'>Submit</p>
+                      <div className="d-flex align-items-center">
+                        <CircularProgress size={15} className="color" />
+                        <p className="ms-2 mb-0 font-size">Submit</p>
                       </div>
                     )
                   ) : type === Update_Department ? (

@@ -21,6 +21,14 @@ const DashboardLayout = () => {
     setMobileOpen(!mobileOpen);
   };
 
+  const path = window.location.pathname;
+  const lastSegment = path.split("/").pop();
+
+  const fullName = lastSegment
+    .split("-")
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(" ");
+
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (!token) {
@@ -34,6 +42,7 @@ const DashboardLayout = () => {
       <AppHeader
         handleDrawerToggle={handleDrawerToggle}
         mobileOpen={mobileOpen}
+        PageName={fullName}
         setMobileOpen={setMobileOpen}
         setIsClosing={isClosing}
         drawerWidth={drawerWidth}

@@ -5,7 +5,7 @@ import SearchIcon from "@mui/icons-material/Search";
 import InputBase from "@mui/material/InputBase";
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
-  borderRadius: theme.shape.borderRadius,
+  borderRadius: 1,
   backgroundColor: theme.palette.common.white,
   "&:hover": {
     backgroundColor: theme.palette.common.white,
@@ -37,9 +37,9 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
     transition: theme.transitions.create("width"),
     width: "100%",
     [theme.breakpoints.up("sm")]: {
-      width: "12ch",
+      width: "100%",
       "&:focus": {
-        width: "20ch",
+        width: "100%",
       },
     },
   },

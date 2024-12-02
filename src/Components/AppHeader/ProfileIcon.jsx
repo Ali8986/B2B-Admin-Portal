@@ -1,56 +1,47 @@
 import Avatar from "@mui/material/Avatar";
 import { useSnackbar } from "notistack";
-import { useEffect, useState, useContext } from "react";
+import { useEffect, useState, useContext, useRef } from "react";
 import Menu from "@mui/material/Menu";
-import MenuItem from "@mui/material/MenuItem";
-import ListItemIcon from "@mui/material/ListItemIcon";
-import Divider from "@mui/material/Divider";
 import Tooltip from "@mui/material/Tooltip";
-import KeyIcon from "@mui/icons-material/Key";
 import Logout from "@mui/icons-material/Logout";
-import { useLocation, useNavigate } from "react-router-dom";
+import { logout } from "../../DAL/Login/Auth";
+import { useNavigate } from "react-router-dom";
 import CustomModal from "../GeneralComponents/CustomModal";
-import EditNoteIcon from "@mui/icons-material/EditNote";
 import ChangePassword from "./changePassword";
-import { ProfileImageContext } from "../../Hooks/createContext"; // Import context
-import { logout, updateProfile } from "../../DAL/Login/Login";
+import { ProfileImageContext } from "../../Hooks/App_Context"; // Import context
 import LogoutComponent from "./Logout";
-import { useUser } from "../../Hooks/adminUser"; // Correct path to your UserContext
+import Custom_Slot_Props from "../../Constants/Styling/Toolbar_Menu";
+import ProfileMenuItems from "./Profile_Menu_Items";
+import { useUserData } from "../../Hooks/App_Context";
 
 export default function ProfileIcon() {
-  const { user } = useUser(); // Get user data from context
+  const { userData } = useUserData();
+  const UserInfo = JSON.parse(localStorage.getItem("UserData"));
+  const Slot_Props = Custom_Slot_Props();
+  const { profileImage } = useContext(ProfileImageContext);
+  const [UserData, setUserData] = useState();
   const { enqueueSnackbar } = useSnackbar();
-  const [data, setData] = useState({});
-  const email = JSON.parse(localStorage.getItem("Email"));
+  const profileContainerRef = useRef(null);
   const navigate = useNavigate();
-  const { pathname } = useLocation();
   const [anchorEl, setAnchorEl] = useState(null);
+  const [active, setActive] = useState(false);
   const [showChangePassword, setShowChangePassword] = useState(false);
   const [showLogoutModal, setShowLogoutModal] = useState(false);
-  const { profileImage, setProfileImage } = useContext(ProfileImageContext);
-
-  const getData = async () => {
-    const response = await updateProfile();
-    if (response.code === 200) {
-      setData(response?.admin);
-      localStorage.setItem("profileImage", response.admin.profile_image);
-      setProfileImage(response.admin.profile_image);
-    }
-  };
 
   const handleEditProfile = () => {
     navigate("/edit-profile");
   };
 
-  const handleClick = (event) => {
-    setAnchorEl(event.currentTarget);
+  const handleClose = (event) => {
+    event.stopPropagation();
+    if (anchorEl) {
+      setActive(false);
+      setAnchorEl(null);
+    }
   };
 
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
-
-  const confirmLogout = async () => {
+  const confirmLogout = async (event) => {
+    handleClose(event);
     setShowLogoutModal(false);
     const response = await logout();
     if (response.code === 200) {
@@ -63,176 +54,126 @@ export default function ProfileIcon() {
   };
 
   useEffect(() => {
-    setTimeout(() => {
-      const is_path_includes = (path) => {
-        return pathname.toString().includes(path);
-      };
-      if (!is_path_includes("/speakers")) {
-        localStorage.removeItem("searchText_speaker_page");
+    const handleOutsideClick = (event) => {
+      if (anchorEl && !profileContainerRef.current.contains(event.target)) {
+        handleClose(event);
+      } else {
+        setAnchorEl(null);
       }
-      if (!is_path_includes("/exhibitors")) {
-        localStorage.removeItem("searchText_exhibitor_page");
-        localStorage.removeItem("filter_Exhibitor_Data");
-        localStorage.removeItem("Chips");
-      }
-      if (!is_path_includes("/events")) {
-        localStorage.removeItem("searchText_events_page");
-      }
-      if (!is_path_includes("/company")) {
-        localStorage.removeItem("searchText_company_page");
-      }
-      if (!is_path_includes("/template-configuration")) {
-        localStorage.removeItem("searchText_Template_Config_page");
-      }
-      if (!is_path_includes("/module-configuration")) {
-        localStorage.removeItem("searchText_Module_Config_page");
-      }
-      if (!is_path_includes("/website-pages")) {
-        localStorage.removeItem("searchText_Website_Pages");
-      }
-      if (!is_path_includes("/departments")) {
-        localStorage.removeItem("searchText_Departments_page");
-      }
-      if (!is_path_includes("/autoresponder-message")) {
-        localStorage.removeItem("searchText_AutoResponder_page");
-      }
-    }, 1000);
-  }, [pathname]);
+    };
+    document.addEventListener("mousedown", handleOutsideClick);
+    return () => document.removeEventListener("mousedown", handleOutsideClick);
+    // eslint-disable-next-line
+  }, [anchorEl]);
 
   useEffect(() => {
-    getData();
+    if (UserInfo) {
+      setUserData(UserInfo);
+    }
     // eslint-disable-next-line
-  }, []);
+  }, [userData]);
 
   return (
-    <div className="Profile-DropDown">
-      <div className="profile-icon">
-        <Tooltip title="Account settings">
+    <div className="px-0">
+      <div className="d-flex justify-content-between">
+        <div className="left-item"></div>
+        <div className="right-item ms-3">
           <div
-            onClick={handleClick}
-            className="profile-icon-button me-3"
+            className="profile-container my-2"
+            ref={profileContainerRef}
+            onClick={(event) => {
+              if (!anchorEl) {
+                setActive(true);
+                setAnchorEl(event.currentTarget);
+              }
+            }}
             aria-controls={anchorEl ? "account-menu" : undefined}
             aria-haspopup="true"
             aria-expanded={!!anchorEl}
           >
-            <Avatar
-              sx={{ width: 45, height: 45 }}
-              src={profileImage ? profileImage : data.profile_image}
-            ></Avatar>
+            <div className="profile-avatar">
+              <div className="MuiAvatar-root MuiAvatar-rounded css-ab6sm">
+                <div className="Profile-DropDown m-1">
+                  <div className="profile-icon">
+                    <Tooltip title="Account settings">
+                      <div>
+                        <Avatar
+                          variant="square"
+                          sx={{ width: 45, height: 45 }}
+                          src={profileImage || null}
+                        ></Avatar>
+                      </div>
+                    </Tooltip>
+                  </div>
+                  <Menu
+                    anchorEl={anchorEl}
+                    id="account-menu"
+                    open={Boolean(anchorEl)}
+                    onClick={(event) => event.stopPropagation()} // Stop propagation
+                    slotProps={Slot_Props}
+                    transformOrigin={{ horizontal: "center", vertical: "top" }}
+                    anchorOrigin={{ horizontal: "center", vertical: "bottom" }}
+                  >
+                    <ProfileMenuItems
+                      Logout={Logout}
+                      setShowLogoutModal={setShowLogoutModal}
+                      handleClose={handleClose}
+                      UserData={UserData}
+                      handleEditProfile={handleEditProfile}
+                      setShowChangePassword={setShowChangePassword}
+                    />
+                  </Menu>
+                  <CustomModal
+                    open={showLogoutModal}
+                    CustomSpacing={true}
+                    setAnchorEl={setAnchorEl}
+                    handleClose={(event) => {
+                      handleClose(event);
+                      setShowLogoutModal(false);
+                    }}
+                    component={
+                      <LogoutComponent
+                        handleCloseLogoutModal={(event) => {
+                          handleClose(event);
+                          setShowLogoutModal(false);
+                        }}
+                        confirmLogout={(e) => confirmLogout(e)}
+                      />
+                    }
+                  />
+                  <CustomModal
+                    open={showChangePassword}
+                    handleClose={(event) => {
+                      handleClose(event);
+                      setShowChangePassword(false);
+                    }}
+                    component={
+                      <ChangePassword
+                        handleClose={() => setShowChangePassword(false)}
+                      />
+                    }
+                  />
+                </div>
+              </div>
+            </div>
+            <div className="profile-info">
+              <span className="user-name">
+                {UserData?.first_name + " " + UserData?.last_name}
+              </span>
+              <span className="user-role">Admin</span>
+            </div>
+            <span
+              className={`pointer ${
+                active ? "chevron-icon-0" : "chevron-icon"
+              }`}
+            >
+              <i
+                className={`px-3 fa-solid bi bi-chevron-down Profile_Icon`}
+              ></i>
+            </span>
           </div>
-        </Tooltip>
+        </div>
       </div>
-      <Menu
-        anchorEl={anchorEl}
-        id="account-menu"
-        open={Boolean(anchorEl)}
-        onClose={handleClose}
-        slotProps={{
-          paper: {
-            elevation: 0,
-            sx: {
-              overflow: "visible",
-              filter: "drop-shadow(0px 2px 8px rgba(0,0,0,0.32))",
-              mt: 1.5,
-              "& .MuiAvatar-root": {
-                width: 32,
-                height: 32,
-                ml: -0.5,
-                mr: 1,
-              },
-              "&::before": {
-                content: '""',
-                display: "block",
-                position: "absolute",
-                top: 0,
-                right: 14,
-                width: 10,
-                height: 10,
-                bgcolor: "background.paper",
-                transform: "translateY(-50%) rotate(45deg)",
-                zIndex: 0,
-              },
-            },
-          },
-        }}
-        transformOrigin={{ horizontal: "right", vertical: "top" }}
-        anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
-      >
-        <MenuItem
-          className="Profile-Icon-Link"
-          onClick={handleClose}
-          sx={{ fontWeight: "600" }}
-        >
-          {user || `${data.first_name} ${data.last_name}`}
-        </MenuItem>
-        <MenuItem
-          className="Profile-Icon-Link"
-          onClick={handleClose}
-          sx={{
-            fontStyle: "italic",
-            fontWeight: "200",
-            color: "#a3a3a3",
-            fontSize: "14px",
-            marginTop: "-10px",
-          }}
-        >
-          {email || "No Email Provided"}
-        </MenuItem>
-        <Divider />
-        <MenuItem
-          className="Profile-Icon-Link"
-          onClick={() => {
-            handleEditProfile();
-            handleClose();
-          }}
-        >
-          <ListItemIcon>
-            <EditNoteIcon color="primary" />
-          </ListItemIcon>
-          Edit Profile
-        </MenuItem>
-        <MenuItem
-          className="Profile-Icon-Link"
-          onClick={() => {
-            handleClose();
-            setShowChangePassword(true);
-          }}
-        >
-          <ListItemIcon>
-            <KeyIcon fontSize="small" color="primary" />
-          </ListItemIcon>
-          Change Password
-        </MenuItem>
-        <MenuItem
-          className="Profile-Icon-Link"
-          onClick={() => {
-            handleClose();
-            setShowLogoutModal(true);
-          }}
-        >
-          <ListItemIcon>
-            <Logout fontSize="small" color="primary" />
-          </ListItemIcon>
-          Logout
-        </MenuItem>
-      </Menu>
-      <CustomModal
-        open={showLogoutModal}
-        handleClose={() => setShowLogoutModal(false)}
-        component={
-          <LogoutComponent
-            handleCloseLogoutModal={() => setShowLogoutModal(false)}
-            confirmLogout={confirmLogout}
-          />
-        }
-      />
-      <CustomModal
-        open={showChangePassword}
-        handleClose={() => setShowChangePassword(false)}
-        component={
-          <ChangePassword handleClose={() => setShowChangePassword(false)} />
-        }
-      />
     </div>
   );
 }

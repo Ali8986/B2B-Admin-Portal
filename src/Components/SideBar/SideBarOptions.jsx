@@ -23,7 +23,7 @@ const SidebarOption = ({ option, handleMobileViewChange }) => {
         onClick={handleMobileViewChange}
       >
         <ListItemIcon>{option.icon}</ListItemIcon>
-        <ListItemText primary={option.title} />
+        <ListItemText primary={option.title} className="Menu_List_Text" />
       </ListItemButton>
     </ListItem>
   );

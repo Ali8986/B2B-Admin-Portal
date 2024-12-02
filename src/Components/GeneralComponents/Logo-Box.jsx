@@ -1,9 +1,9 @@
-import Logo from "../../Assets/Images/b2b-high-resolution-logo-transparent.png";
+import Logo from "../../Assets/Images/logo.png";
 
 const LogoBox = () => {
   return (
-    <div className="icon">
-      <img src={Logo} className="img-fluid" alt="" />
+    <div className="icon w-100">
+      <img src={Logo} width={100} className="img-fluid" alt="" />
     </div>
   );
 };
