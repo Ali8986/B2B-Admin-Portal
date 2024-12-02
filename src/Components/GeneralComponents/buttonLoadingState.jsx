@@ -6,7 +6,7 @@ const LoadingButton = ({ isLoading, children, ...props }) => {
     <Button
       {...props}
       fullWidth
-      className="Loading-BTN mt-3"
+      className="Loading-BTN mt-1"
       startIcon={isLoading ? <CircularProgress size={15} /> : null}
       disabled={isLoading}
     >

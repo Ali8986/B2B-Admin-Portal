@@ -4,7 +4,7 @@ import { baseUri } from "../config/config";
 
 axios.defaults.headers.post["Content-Type"] = "application/json";
 
-// const _url = "https://cors-anywhere.herokuapp.com/";
+const _url = "https://cors-anywhere.herokuapp.com/";
 export async function invokeApi({
   path,
   method = "GET",
@@ -17,7 +17,6 @@ export async function invokeApi({
     url: baseUri + path,
     headers,
   };
-  console.log(reqObj.url);
 
   reqObj.params = queryParams;
 
@@ -32,18 +31,22 @@ export async function invokeApi({
   }
 
   let results;
-  if (postData instanceof FormData) {
-    console.info(...postData, "<===REQUEST-DATA===>");
-  }
+
+  // if (window.location.hostname == "localhost") {
   console.info("<===REQUEST-OBJECT===>", reqObj);
+  // }
 
   try {
     results = await axios(reqObj);
+    // if (window.location.hostname == "localhost") {
     console.info("<===Api-Success-Result===>", results);
+    // }
 
     return results.data;
   } catch (error) {
+    // if (window.location.hostname == "localhost") {
     console.info("<===Api-Error===>", error.response.data);
+    // }
 
     if (error.response.status === 401) {
       localStorage.clear();

@@ -139,7 +139,7 @@ function Exhibitors() {
   const handleStatusChange = (e) => {
     setSetFilterData((prevData) => ({
       ...prevData,
-      status: e.target.value || "",
+      emp_name: e.target.value || "",
     }));
   };
 

@@ -12,12 +12,16 @@ const SidebarOption = ({ option, handleMobileViewChange }) => {
   const location = useLocation();
 
   return (
-    <ListItem
-      disablePadding
-      className={location.pathname.includes(option.path) ? "active-tab" : ""}
-    >
+    <ListItem disablePadding className="position-relative">
+      {option.badge && (
+        <div className="rounded-circle bg-primary  ms-2 mt-1  p-1 position-absolute start-50 top-0"></div>
+      )}
       <ListItemButton
-        className="side-bar-btn"
+        className={
+          location.pathname.includes(option.path)
+            ? "active-tab side-bar-btn"
+            : "side-bar-btn"
+        }
         component={Link}
         to={option.path}
         onClick={handleMobileViewChange}

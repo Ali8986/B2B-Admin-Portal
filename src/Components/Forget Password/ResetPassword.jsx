@@ -2,19 +2,33 @@ import FormInput from "../GeneralComponents/FormInput";
 import { useState } from "react";
 import FormBox from "../GeneralComponents/Form-Box";
 import LogoBox from "../GeneralComponents/Logo-Box";
-import { updatePassword } from "../../DAL/Login/Login";
 import LoadingButton from "../GeneralComponents/buttonLoadingState";
 import { useSnackbar } from "notistack";
+import { _Reset_Admin_Password } from "../../DAL/Login/ResetPassword";
+import { Visibility, VisibilityOff } from "@mui/icons-material";
+import { IconButton } from "@mui/material";
+import CustomInput from "../GeneralComponents/CustomTags/CustomInput";
 
 const ResetPassword = ({ size, Default, onChange, handleSnackbarClose }) => {
   const { enqueueSnackbar } = useSnackbar();
   const [loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [formData, setFormData] = useState({
     email: "aliusama.vectorcoder@gmail.com",
-    user_type: "admin",
     password: "",
     confirm_password: "",
   });
+
+  const HandleShowHidePassword = (value) => {
+    if (value === "New Password") {
+      setShowPassword(!showPassword);
+    }
+    if (value === "Confirm Password") {
+      setShowConfirmPassword(!showConfirmPassword);
+    }
+  };
+
   const handleChange = (field, value) => {
     setFormData({ ...formData, [field]: value });
   };
@@ -22,7 +36,7 @@ const ResetPassword = ({ size, Default, onChange, handleSnackbarClose }) => {
     event.preventDefault();
     if (event.target.checkValidity()) {
       setLoading(true);
-      const response = await updatePassword(formData);
+      const response = await _Reset_Admin_Password(formData);
       if (response.code === 200) {
         enqueueSnackbar(response.message, { variant: "success" });
         Default();
@@ -42,20 +56,31 @@ const ResetPassword = ({ size, Default, onChange, handleSnackbarClose }) => {
       </div>
       <div className="underline"></div>
       <form onSubmit={handleSubmit}>
-        <FormInput
-          size={size}
-          label="New Password"
-          type="password"
-          value={formData.password}
-          required
+        <CustomInput
+          label="Password*"
+          type={showPassword ? "text" : "password"}
+          Inputvalue={formData.password}
+          autoComplete="password"
           onChange={(e) => handleChange("password", e.target.value)}
+          required={true}
+          endAdornment={
+            <IconButton onClick={() => setShowPassword(!showPassword)}>
+              {showPassword ? <Visibility /> : <VisibilityOff />}
+            </IconButton>
+          }
         />
-        <FormInput
-          label="Confirm Password"
-          type="password"
-          value={formData.confirm_password}
+        <CustomInput
+          label="Confirm Password*"
+          type={showConfirmPassword ? "text" : "password"}
+          Inputvalue={formData.confirm_password}
+          autoComplete="confirm_password"
           onChange={(e) => handleChange("confirm_password", e.target.value)}
-          required
+          required={true}
+          endAdornment={
+            <IconButton onClick={() => setShowPassword(!showPassword)}>
+              {showPassword ? <Visibility /> : <VisibilityOff />}
+            </IconButton>
+          }
         />
         <LoadingButton
           type="submit"

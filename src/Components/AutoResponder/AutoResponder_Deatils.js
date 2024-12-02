@@ -3,7 +3,6 @@ import { TextField, IconButton } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 
 const AutoResponderDetails = ({ open, handleClose, selectedObject }) => {
-  console.log("Department", open, selectedObject);
   selectedObject = selectedObject || {};
 
   return (

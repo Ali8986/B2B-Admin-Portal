@@ -38,7 +38,6 @@ function AutoResponderMessageList() {
       page,
       rowsPerPage
     );
-    console.log(response, "response");
     if (response.code === 200) {
       const { autoresponder_message_list, total_count, total_pages } = response;
       const proccessedData = autoresponder_message_list.map((item) => ({

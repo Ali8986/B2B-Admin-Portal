@@ -18,25 +18,23 @@ const HeaderWithBackButton = ({ title, path, main = false }) => {
     <>
       <div
         className={
-          path && !main
-            ? "col-12 ps-1 d-flex align-items-center mb-4"
-            : "d-flex"
+          path && !main ? "col-6 ps-1 d-flex align-items-center" : "d-flex"
         }
       >
         {path ? (
           <IconButton
             onClick={handleBackClick}
-            style={{ color: "#7396cc" }} // Custom color for the icon
+            style={{ color: "#006599" }} // Custom color for the icon
           >
             <ArrowBackIcon />
           </IconButton>
         ) : null}
         <h2
           style={{
-            color: "#7396cc",
+            color: "#006599",
             marginBottom: "0px",
           }}
-          className='ms-0'
+          className="ms-0"
         >
           {title}
         </h2>

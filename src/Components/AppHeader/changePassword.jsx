@@ -2,8 +2,8 @@ import { useState } from "react";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import { Button, IconButton, TextField } from "@mui/material";
-import { updateAdminPassword } from "../../DAL/Login/Login";
 import { useSnackbar } from "notistack";
+import { changePassword } from "../../DAL/Edit_Profile/Profile";
 
 const ChangePassword = ({ handleClose }) => {
   const { enqueueSnackbar } = useSnackbar();
@@ -37,7 +37,7 @@ const ChangePassword = ({ handleClose }) => {
       enqueueSnackbar("Password Don't Match", { variant: "error" });
       return;
     }
-    const response = await updateAdminPassword(formData);
+    const response = await changePassword(formData);
     if (response.code === 200) {
       handleClose(); //
       enqueueSnackbar(response.message, { variant: "success" });

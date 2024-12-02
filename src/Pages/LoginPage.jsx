@@ -1,25 +1,14 @@
-import AdminImage from "../Assets/Images/Business.jpg";
 import ComponentState from "../Components/Login/switching";
 
 const LoginPage = () => {
   return (
-    <div className="container-Fluid overflow-hidden">
-      <div className="row g-0">
-        <div className="col-12 col-md-12 col-lg-4">
-          <div className="p-3 p-md-5 d-flex flex-column hv-100 justify-content-center">
+    <div className="background-Container">
+      <div className="row w-100 justify-content-center hv-100">
+        <div className="form-container col-12 row justify-content-evenly h-100">
+          <div className="col-12 col-md-4 my-auto">
             <ComponentState />
           </div>
-        </div>
-        <div className="col-12 col-md-12 col-lg-8">
-          <div
-            className="d-none d-lg-block"
-            style={{
-              backgroundImage: `url(${AdminImage})`,
-              backgroundSize: "cover",
-              backgroundPosition: "center center",
-              height: "100vh",
-            }}
-          ></div>
+          <div className="d-none d-md-block col-md-7 Login_Page_Right"></div>
         </div>
       </div>
     </div>

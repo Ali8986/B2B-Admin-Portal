@@ -1,10 +1,11 @@
 import FormInput from "../GeneralComponents/FormInput";
 import FormBox from "../GeneralComponents/Form-Box";
 import LogoBox from "../GeneralComponents/Logo-Box";
-import { changePasswordApi } from "../../DAL/Login/Login";
 import { useState } from "react";
 import LoadingButton from "../GeneralComponents/buttonLoadingState";
 import { useSnackbar } from "notistack";
+import { _Email_Verification } from "../../DAL/Login/Auth";
+import CustomInput from "../GeneralComponents/CustomTags/CustomInput";
 
 const ForgetForm = ({ Default, handleOtp }) => {
   const { enqueueSnackbar } = useSnackbar();
@@ -18,10 +19,9 @@ const ForgetForm = ({ Default, handleOtp }) => {
     if (e.target.checkValidity()) {
       const formData = {
         email,
-        user_type: "admin",
       };
       setLoading(true);
-      const response = await changePasswordApi(formData);
+      const response = await _Email_Verification(formData);
       if (response.code === 200) {
         handleOtp();
         setLoading(false);
@@ -44,11 +44,12 @@ const ForgetForm = ({ Default, handleOtp }) => {
       <div className="underline my-3"></div>
       <div className="Forget-Email">
         <form onSubmit={handleSubmit} noValidate>
-          <FormInput
-            label="Email"
+          <CustomInput
+            label="Email*"
             type="email"
-            value={email}
+            Inputvalue={email}
             onChange={(e) => setEmail(e.target.value)}
+            required={true}
           />
           <div className="text-end w-100">
             <a href="#home" className="Back-To-Login" onClick={handleClick}>

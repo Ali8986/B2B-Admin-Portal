@@ -2,9 +2,10 @@ import { useState } from "react";
 import FormBox from "../GeneralComponents/Form-Box";
 import { MuiOtpInput } from "mui-one-time-password-input";
 import LogoBox from "../GeneralComponents/Logo-Box";
-import { confirmPinCode } from "../../DAL/Login/Login";
 import LoadingButton from "../GeneralComponents/buttonLoadingState";
 import { useSnackbar } from "notistack";
+import { _Code_Verification } from "../../DAL/Login/Auth";
+import CustomButton from "../GeneralComponents/CustomTags/CustomButton";
 
 const OTP = ({ Default, Confirm }) => {
   const { enqueueSnackbar } = useSnackbar();
@@ -22,10 +23,9 @@ const OTP = ({ Default, Confirm }) => {
     const formData = {
       email,
       verification_code: otp,
-      user_type: "admin",
     };
     setLoading(true);
-    const response = await confirmPinCode(formData);
+    const response = await _Code_Verification(formData);
     if (response && response.code === 200) {
       enqueueSnackbar(response.message, { variant: "success" });
       Confirm();
@@ -39,7 +39,7 @@ const OTP = ({ Default, Confirm }) => {
       <FormBox>
         <LogoBox />
         <div className="heading-text">
-          <h2 className="text-decoration-underline">Email Verification Code</h2>
+          <h4>Email Verification Code</h4>
           <p>We have sent a code to your email</p>
         </div>
         <div>
@@ -47,26 +47,35 @@ const OTP = ({ Default, Confirm }) => {
             value={otp}
             TextFieldsProps={() => ({ size: "small" })}
             onChange={handleChange}
-            className="my-2 px-4 otp-input"
             length={6}
+            className="otp-input"
           />
         </div>
-        <div className="text-end w-100 px-4 py-0 my-0">
+        <div className="text-end w-100 py-2">
           <a href="#home" className="Back-To-Login" onClick={handleClick}>
             Back to Login
           </a>
         </div>
         <div className="w-100">
-          <LoadingButton
-            type="submit"
-            size="large"
-            variant="contained"
-            className="Loading-BTN mt-3"
-            fullWidth
-            isLoading={loading}
-          >
-            Verify Account
-          </LoadingButton>
+          {loading ? (
+            <LoadingButton
+              type="submit"
+              size="large"
+              variant="contained"
+              fullWidth
+              isLoading={loading}
+            >
+              Login
+            </LoadingButton>
+          ) : (
+            <CustomButton
+              type="submit"
+              className="w-100 text-uppercase"
+              disabled={loading}
+            >
+              Login
+            </CustomButton>
+          )}
         </div>
       </FormBox>
     </form>

@@ -4,10 +4,12 @@ import CssBaseline from "@mui/material/CssBaseline";
 import AppHeader from "./TopBar";
 import AppSidebar from "./SideBar";
 import { Outlet, useNavigate } from "react-router-dom";
+import { minHeight } from "@mui/system";
 
-const drawerWidth = 350;
+const drawerWidth = 250;
 
 const DashboardLayout = () => {
+  const [isHovered, setIsHovered] = useState(false);
   const navigate = useNavigate();
   const [mobileOpen, setMobileOpen] = useState(false);
   const [isClosing, setIsClosing] = useState(false);
@@ -38,18 +40,20 @@ const DashboardLayout = () => {
         setIsClosing={isClosing}
         drawerWidth={drawerWidth}
       />
-
       <AppSidebar
         drawerWidth={drawerWidth}
         className="drawer-main-sidebar"
         mobileOpen={mobileOpen}
         handleDrawerClose={handleDrawerClose}
       />
-
       <div
-        className={"Dashboard-layout-main"}
+        className={`Dashboard-layout-main custom-scrollbar ${
+          isHovered ? "hovered" : ""
+        }`}
+        onMouseEnter={() => setIsHovered(true)}
+        onMouseLeave={() => setIsHovered(false)}
         style={{
-          height: "100%",
+          minHeight: "100vh",
           width: `calc(100% - ${drawerWidth}px)`,
         }}
       >

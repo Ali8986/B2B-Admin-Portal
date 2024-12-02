@@ -119,7 +119,6 @@ function UpdateEventsCompany() {
     setSelectedObject(selectedObj);
     setShowDetails(true);
   };
-  console.log(selected, "selectedObject");
   const TABLE_HEAD = [
     {
       id: "checkbox",

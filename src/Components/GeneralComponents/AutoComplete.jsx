@@ -10,8 +10,8 @@ const AutoComplete = ({
   optionLabelKey = "name",
   isMultiple = false,
   onFocus,
-  onBlur
-}) => { 
+  onBlur,
+}) => {
   return (
     <Autocomplete
       multiple={isMultiple} // Use the isMultiple prop to set multiple
@@ -22,7 +22,9 @@ const AutoComplete = ({
       getOptionLabel={(option) => option[optionLabelKey]}
       onInputChange={onInputChange}
       options={searchCompanyData}
-      isOptionEqualToValue={(option, value) => !!value && option._id === value._id}
+      isOptionEqualToValue={(option, value) =>
+        !!value && option._id === value._id
+      }
       noOptionsText={DataNotFound}
       disablePortal
       renderOption={(props, option) => (

@@ -8,35 +8,33 @@ import Divider from "@mui/material/Divider";
 import Tooltip from "@mui/material/Tooltip";
 import KeyIcon from "@mui/icons-material/Key";
 import Logout from "@mui/icons-material/Logout";
+import { logout } from "../../DAL/Login/Auth";
 import { useLocation, useNavigate } from "react-router-dom";
 import CustomModal from "../GeneralComponents/CustomModal";
 import EditNoteIcon from "@mui/icons-material/EditNote";
 import ChangePassword from "./changePassword";
 import { ProfileImageContext } from "../../Hooks/createContext"; // Import context
-import { logout, updateProfile } from "../../DAL/Login/Login";
 import LogoutComponent from "./Logout";
-import { useUser } from "../../Hooks/adminUser"; // Correct path to your UserContext
 
 export default function ProfileIcon() {
-  const { user } = useUser(); // Get user data from context
   const { enqueueSnackbar } = useSnackbar();
-  const [data, setData] = useState({});
+  // const [data, setData] = useState({});
   const email = JSON.parse(localStorage.getItem("Email"));
   const navigate = useNavigate();
   const { pathname } = useLocation();
   const [anchorEl, setAnchorEl] = useState(null);
   const [showChangePassword, setShowChangePassword] = useState(false);
   const [showLogoutModal, setShowLogoutModal] = useState(false);
-  const { profileImage, setProfileImage } = useContext(ProfileImageContext);
+  const { profileImage } = useContext(ProfileImageContext);
+  const Profile_Image = localStorage.getItem("UserImage");
+  const User_Name = localStorage.getItem("UserName");
 
-  const getData = async () => {
-    const response = await updateProfile();
-    if (response.code === 200) {
-      setData(response?.admin);
-      localStorage.setItem("profileImage", response.admin.profile_image);
-      setProfileImage(response.admin.profile_image);
-    }
-  };
+  // const getData = async () => {
+  //   const response = await updateProfile();
+  //   if (response.code === 200) {
+  //     // setData(response?.admin);
+  //   }
+  // };
 
   const handleEditProfile = () => {
     navigate("/edit-profile");
@@ -100,7 +98,7 @@ export default function ProfileIcon() {
   }, [pathname]);
 
   useEffect(() => {
-    getData();
+    // getData();
     // eslint-disable-next-line
   }, []);
 
@@ -117,7 +115,7 @@ export default function ProfileIcon() {
           >
             <Avatar
               sx={{ width: 45, height: 45 }}
-              src={profileImage ? profileImage : data.profile_image}
+              src={profileImage ? profileImage : Profile_Image}
             ></Avatar>
           </div>
         </Tooltip>
@@ -163,7 +161,7 @@ export default function ProfileIcon() {
           onClick={handleClose}
           sx={{ fontWeight: "600" }}
         >
-          {user || `${data.first_name} ${data.last_name}`}
+          {User_Name}
         </MenuItem>
         <MenuItem
           className="Profile-Icon-Link"

@@ -21,17 +21,17 @@ import { invokeApi } from "../../bl_libs/invokeApi";
 //   return invokeApi(requestObj);
 // };
 
-export const login = async (data) => {
-  const requestObj = {
-    path: `api/app_api/login`,
-    method: "POST",
-    headers: {
-      "x-sh-auth": localStorage.getItem("token"),
-    },
-    postData: data,
-  };
-  return invokeApi(requestObj);
-};
+// export const login = async (data) => {
+//   const requestObj = {
+//     path: `api/app_api/login`,
+//     method: "POST",
+//     headers: {
+//       "x-sh-auth": localStorage.getItem("token"),
+//     },
+//     postData: data,
+//   };
+//   return invokeApi(requestObj);
+// };
 export const changePasswordApi = async (data) => {
   const requestObj = {
     path: `api/app_api/email_verification`,
@@ -44,17 +44,17 @@ export const changePasswordApi = async (data) => {
   return invokeApi(requestObj);
 };
 
-export const logout = async (data) => {
-  const requestObj = {
-    path: `api/app_api/logout`,
-    method: "GET",
-    headers: {
-      "x-sh-auth": localStorage.getItem("token"),
-    },
-    postData: data,
-  };
-  return invokeApi(requestObj);
-};
+// export const logout = async (data) => {
+//   const requestObj = {
+//     path: `api/app_api/logout`,
+//     method: "GET",
+//     headers: {
+//       "x-sh-auth": localStorage.getItem("token"),
+//     },
+//     postData: data,
+//   };
+//   return invokeApi(requestObj);
+// };
 
 export const register = async (data) => {
   const requestObj = {

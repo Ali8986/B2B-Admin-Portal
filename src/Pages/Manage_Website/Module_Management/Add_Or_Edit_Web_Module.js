@@ -93,11 +93,9 @@ function AddorEditCompany({ type }) {
       if (!state.isAdding) {
         handleFormateData(state?.pageData);
       } else if (type === Updating_Website_Module) {
-        alert("Editing");
         Web_Mod_detail();
       }
     } else {
-      alert("No State");
       FetchWebModuleDetails();
       if (type === Updating_Website_Module) {
         Web_Mod_detail();

@@ -1,6 +1,7 @@
 import { TextField } from "@mui/material";
 
 const FormInput = ({
+  InputProps,
   label,
   name,
   type,
@@ -12,6 +13,7 @@ const FormInput = ({
   const autoComplete = type === "password" ? "current-password" : "on";
   return (
     <TextField
+      InputProps={{ ...InputProps }}
       className={`my-2`}
       multiline={multline}
       rows={3}

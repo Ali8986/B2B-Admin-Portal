@@ -1,23 +1,18 @@
 import React, { useState, useEffect, useContext } from "react";
-import {
-  TextField,
-  Button,
-  Avatar,
-  Typography,
-  IconButton,
-} from "@mui/material";
+import { Button, Avatar, IconButton, CircularProgress } from "@mui/material";
 import { styled } from "@mui/system";
 import CameraAltIcon from "@mui/icons-material/CameraAlt";
 import { ProfileImageContext } from "../../Hooks/createContext";
-import {
-  ImageUpload,
-  profileDetail,
-  updateProfile,
-} from "../../DAL/Login/Login";
+import FormInput from "../GeneralComponents/FormInput";
 import { useSnackbar } from "notistack";
-import { useUser } from "../../Hooks/adminUser"; // Correct path to your UserContext
 import "../../Assets/Styles/EditProfile.css";
 import { s3baseUrl } from "../../config/config";
+import PhoneInput from "react-phone-number-validation";
+import CustomInput from "../GeneralComponents/CustomTags/CustomInput";
+import {
+  Edit_Profile_Settings,
+  profile_Detail,
+} from "../../DAL/Edit_Profile/Profile";
 
 const StyledAvatar = styled(Avatar)({
   width: "100px",
@@ -27,138 +22,186 @@ const StyledAvatar = styled(Avatar)({
 });
 
 const EditProfile = () => {
-  const { setUser } = useUser(); // Get user setter from context
+  // const profileimg = localStorage.getItem("UserImage");
+  const [phoneNumber, setPhoneNumber] = useState("");
+  const [Data, setData] = useState({
+    first_name: "",
+    last_name: "",
+    contact_number: "",
+    address: "",
+    image: null,
+  });
   const { enqueueSnackbar } = useSnackbar();
+  const [loading, setLoading] = useState(false);
   const { profileImage, setProfileImage } = useContext(ProfileImageContext);
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
-  const [contactNumber, setContactNumber] = useState("");
-  const [profileEmail, setProfileEmail] = useState("");
+
+  const handlePhoneChange = (value) => {
+    console.log(phoneNumber);
+    setPhoneNumber(value);
+    setData((prevState) => ({
+      ...prevState,
+      contact_number: value,
+    }));
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const updatedProfile = {
-      first_name: firstName,
-      last_name: lastName,
-      contact_number: contactNumber,
-      profile_image: profileImage,
-      status: true,
-    };
-    const response = await profileDetail(updatedProfile);
+    const formData = new FormData();
+    formData.append("employee_id", parseInt(Data.employee_id));
+    formData.append("first_name", Data.first_name);
+    formData.append("last_name", Data.last_name);
+    formData.append("contact_number", Data.contact_number.trim());
+    formData.append("address", Data.address.trim());
+
+    if (profileImage) {
+      formData.append("image", Data.image);
+    }
+    setLoading(true);
+    const response = await Edit_Profile_Settings(Data.employee_id, formData);
     if (response.code === 200) {
-      setUser(`${updatedProfile.first_name} ${updatedProfile.last_name}`);
-      localStorage.setItem("Email", JSON.stringify(profileEmail));
+      localStorage.setItem("UserData", JSON.stringify(Data));
       enqueueSnackbar("Admin details updated successfully", {
         variant: "success",
       });
+      setLoading(false);
     } else {
       enqueueSnackbar(response.message, { variant: "error" });
+      setLoading(false);
     }
   };
 
   const handleImageChange = async (e) => {
-    const file = e.target.files[0];
-    const imageData = new FormData();
-    imageData.append("image", file);
-    const response = await ImageUpload(imageData);
+    localStorage.setItem("UserImage", URL.createObjectURL(e.target.files[0]));
+    setProfileImage(URL.createObjectURL(e.target.files[0]));
+    setData((prevState) => ({
+      ...prevState,
+      image: e.target.files[0],
+    }));
+  };
+  const getUserDetails = async (id) => {
+    setLoading(true);
+    const response = await profile_Detail(id);
     if (response.code === 200) {
-      setProfileImage(s3baseUrl + response.path);
+      const {
+        _id,
+        first_name,
+        last_name,
+        contact_number,
+        address,
+        profile_pic,
+      } = response.employee;
+      setData({
+        ...Data,
+        employee_id: _id,
+        first_name: first_name || "",
+        last_name: last_name || "",
+        contact_number: contact_number || "",
+        address: address || "",
+      });
+      setProfileImage(s3baseUrl + profile_pic.small);
+      setPhoneNumber(contact_number);
+      setLoading(false);
     } else {
       enqueueSnackbar(response.message, { variant: "error" });
+      setLoading(false);
     }
   };
-  const profileimg = localStorage.getItem("profileImage");
-  useEffect(() => {
-    const fetchProfileData = async () => {
-      const response = await updateProfile();
-      if (response.code === 200) {
-        const profileData = response.admin;
-        setFirstName(profileData.first_name || "");
-        setLastName(profileData.last_name || "");
-        setUser(`${profileData.first_name} ${profileData.last_name}`);
-        setContactNumber(profileData.contact_number);
-        const email = JSON.parse(localStorage.getItem("Email"));
-        setProfileEmail(email || "");
-        setProfileImage(profileData.profile_image || "");
-      } else {
-        enqueueSnackbar(response.message, { variant: "error" });
-      }
-    };
 
-    fetchProfileData();
-  }, [setProfileImage, setUser, enqueueSnackbar]);
+  useEffect(() => {
+    const User_Id = localStorage.getItem("UserId");
+    if (User_Id) {
+      getUserDetails(User_Id);
+    }
+    //eslint-disable-next-line
+  }, []);
 
   return (
-    <div className='p-3'>
+    <div className="p-3">
       {/* <HeaderWithBackButton title="Edit Profile" path="/dashboard" /> */}
-      <div className='ProfileContainer'>
-        <div className='Position_update'>
-          <StyledAvatar alt='Profile Image' src={profileImage || profileimg} />
-          <Typography variant='h5' component='h1' gutterBottom>
-            Edit Profile
-          </Typography>
-          <input
-            accept='image/*'
-            style={{ display: "none" }}
-            id='upload-button'
-            type='file'
-            onChange={handleImageChange}
-          />
-          <label htmlFor='upload-button'>
-            <IconButton
-              className='Profile-Image-Change'
-              color='primary'
-              aria-label='upload picture'
-              component='span'
-            >
-              <CameraAltIcon />
-            </IconButton>
-          </label>
-        </div>
+      <div className="ProfileContainer">
+        {loading ? (
+          <CircularProgress />
+        ) : (
+          <>
+            <div className="Position_update">
+              <StyledAvatar alt="Profile Image" src={profileImage} />
+              <h5>Edit Profile</h5>
+              <input
+                accept="image/*"
+                style={{ display: "none" }}
+                id="upload-button"
+                type="file"
+                onChange={handleImageChange}
+              />
+              <label htmlFor="upload-button">
+                <IconButton
+                  className="Profile-Image-Change"
+                  color="primary"
+                  aria-label="upload picture"
+                  component="span"
+                >
+                  <CameraAltIcon />
+                </IconButton>
+              </label>
+            </div>
+            <form onSubmit={handleSubmit} className="w-100">
+              <div className="mt-2">
+                <CustomInput
+                  label="First Name*"
+                  type="text"
+                  Inputvalue={Data.first_name || ""} // Bind to Data
+                  onChange={(e) =>
+                    setData({ ...Data, first_name: e.target.value })
+                  }
+                />
+              </div>
+              <CustomInput
+                label="Last Name*"
+                type="text"
+                Inputvalue={Data.last_name || ""} // Bind to Data
+                onChange={(e) =>
+                  setData({ ...Data, last_name: e.target.value })
+                }
+              />
+              <PhoneInput
+                inputClass="Profile_Phone"
+                countryCodeEditable={false}
+                dropdownClass="select-div2"
+                required={true}
+                autoSelectCountry={true}
+                country="pk"
+                value={Data.contact_number || ""} // Directly bind to state
+                onChange={handlePhoneChange}
+                setValue={setPhoneNumber}
+                enableSearch={true}
+              />
 
-        <form onSubmit={handleSubmit}>
-          <TextField
-            label='First Name'
-            variant='standard'
-            size='small'
-            fullWidth
-            value={firstName}
-            margin='normal'
-            onChange={(e) => setFirstName(e.target.value)}
-            required
-          />
-          <TextField
-            label='Last Name'
-            variant='standard'
-            size='small'
-            fullWidth
-            value={lastName}
-            margin='normal'
-            onChange={(e) => setLastName(e.target.value)}
-            required
-          />
-          <TextField
-            label='Contact Number'
-            type='tel'
-            variant='standard'
-            size='small'
-            fullWidth
-            value={contactNumber}
-            margin='normal'
-            onChange={(e) => setContactNumber(e.target.value)}
-            required
-          />
-          <div className='col-12 d-flex justify-content-end'>
-            <Button
-              variant='contained'
-              color='primary'
-              type='submit'
-              sx={{ mt: 2 }}
-            >
-              Update
-            </Button>
-          </div>
-        </form>
+              <div className="mt-2">
+                <FormInput
+                  label="Address"
+                  name="address"
+                  required={true}
+                  type="text"
+                  multline={true}
+                  value={Data.address || ""} // Bind to Data
+                  onChange={(e) =>
+                    setData({ ...Data, address: e.target.value })
+                  }
+                />
+              </div>
+              <div className="col-12 d-flex justify-content-end">
+                <Button
+                  variant="contained"
+                  color="primary"
+                  type="submit"
+                  sx={{ mt: 2 }}
+                >
+                  Update
+                </Button>
+              </div>
+            </form>
+          </>
+        )}
       </div>
     </div>
   );
