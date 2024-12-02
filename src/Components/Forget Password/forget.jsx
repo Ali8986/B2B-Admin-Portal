@@ -5,7 +5,8 @@ import { useState } from "react";
 import LoadingButton from "../GeneralComponents/buttonLoadingState";
 import { useSnackbar } from "notistack";
 import { _Email_Verification } from "../../DAL/Login/Auth";
-import { Button } from "@mui/material";
+import MailLockIcon from "@mui/icons-material/MailLock";
+import { Button, IconButton, Tooltip } from "@mui/material";
 
 const ForgetForm = ({ Default, handleOtp }) => {
   const { enqueueSnackbar } = useSnackbar();
@@ -50,6 +51,18 @@ const ForgetForm = ({ Default, handleOtp }) => {
             type="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
+            InputProps={{
+              endAdornment: (
+                <Tooltip
+                  title="Enter your email to get verification code"
+                  arrow
+                >
+                  <IconButton>
+                    <MailLockIcon style={{ color: "#016699" }} />
+                  </IconButton>
+                </Tooltip>
+              ),
+            }}
           />
           <div className="text-end w-100 py-0 my-0">
             <Button

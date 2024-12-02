@@ -2,7 +2,6 @@ import { AppBar } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import React from "react";
 import ProfileIcon from "../../Components/AppHeader/ProfileIcon";
-import { get } from "jquery";
 
 const AppHeader = ({ handleDrawerToggle, drawerWidth, PageName }) => {
   return (
@@ -22,7 +21,7 @@ const AppHeader = ({ handleDrawerToggle, drawerWidth, PageName }) => {
         <MenuIcon />
       </div>
       <div>
-        <h4 className="text-black Top_Bar_Heading mb-0">{PageName}</h4>
+        <h4 className="Top_Bar_Heading mb-0">{PageName}</h4>
       </div>
       <ProfileIcon />
     </AppBar>

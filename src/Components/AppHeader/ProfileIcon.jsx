@@ -16,10 +16,9 @@ import { useUserData } from "../../Hooks/App_Context";
 
 export default function ProfileIcon() {
   const { userData } = useUserData();
-  const UserInfo = JSON.parse(localStorage.getItem("UserData"));
   const Slot_Props = Custom_Slot_Props();
   const { profileImage } = useContext(ProfileImageContext);
-  const [UserData, setUserData] = useState();
+  const [UserData, setUserData] = useState({});
   const { enqueueSnackbar } = useSnackbar();
   const profileContainerRef = useRef(null);
   const navigate = useNavigate();
@@ -67,14 +66,18 @@ export default function ProfileIcon() {
   }, [anchorEl]);
 
   useEffect(() => {
-    if (UserInfo) {
-      setUserData(UserInfo);
+    if (userData) {
+      setUserData(userData);
     }
     // eslint-disable-next-line
   }, [userData]);
 
   return (
-    <div className="px-0">
+    <div
+      className={`px-0 Main_Profile_container ${
+        UserData?.first_name && UserData?.last_name ? "Animation" : ""
+      }`}
+    >
       <div className="d-flex justify-content-between">
         <div className="left-item"></div>
         <div className="right-item ms-3">
@@ -95,7 +98,12 @@ export default function ProfileIcon() {
               <div className="MuiAvatar-root MuiAvatar-rounded css-ab6sm">
                 <div className="Profile-DropDown m-1">
                   <div className="profile-icon">
-                    <Tooltip title="Account settings">
+                    <Tooltip
+                      title="Account settings"
+                      arrow
+                      enterDelay={500}
+                      leaveDelay={200}
+                    >
                       <div>
                         <Avatar
                           variant="square"
@@ -111,8 +119,14 @@ export default function ProfileIcon() {
                     open={Boolean(anchorEl)}
                     onClick={(event) => event.stopPropagation()} // Stop propagation
                     slotProps={Slot_Props}
-                    transformOrigin={{ horizontal: "center", vertical: "top" }}
-                    anchorOrigin={{ horizontal: "center", vertical: "bottom" }}
+                    transformOrigin={{
+                      horizontal: "center",
+                      vertical: "top",
+                    }}
+                    anchorOrigin={{
+                      horizontal: "center",
+                      vertical: "bottom",
+                    }}
                   >
                     <ProfileMenuItems
                       Logout={Logout}

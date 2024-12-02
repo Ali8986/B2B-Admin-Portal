@@ -52,6 +52,7 @@ const TABLE_HEAD_leaves_List = [
       return (
         <span>
           <Chip
+            size="medium"
             className={`${row.status === "pending" && "text-white"}`}
             label={
               row.status === "pending"

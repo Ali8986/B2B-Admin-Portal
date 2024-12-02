@@ -121,9 +121,9 @@ function HomePage() {
         <div className="py-4 px-4" style={{ minHeight: "100vh" }}>
           {/* Header Section */}
           <div className="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
-            <h4 className="mb-0 text-dark col-sm-12 col-md-8 fw-normal">
+            {/* <h4 className="mb-0 text-dark col-sm-12 col-md-8 fw-normal">
               Welcome Back! {UserInfo?.name}
-            </h4>
+            </h4> */}
             {/* <Badge color="secondary" badgeContent={UserInfo.pending_feedbacks}>
               <Button
                 fullWidth

@@ -6,7 +6,7 @@ import LoadingButton from "../GeneralComponents/buttonLoadingState";
 import { useSnackbar } from "notistack";
 import { _Reset_Admin_Password } from "../../DAL/Login/ResetPassword";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
-import { IconButton } from "@mui/material";
+import { IconButton, Tooltip } from "@mui/material";
 
 const ResetPassword = ({ size, Default, onChange, handleSnackbarClose }) => {
   const { enqueueSnackbar } = useSnackbar();
@@ -18,15 +18,6 @@ const ResetPassword = ({ size, Default, onChange, handleSnackbarClose }) => {
     password: "",
     confirm_password: "",
   });
-
-  // const HandleShowHidePassword = (value) => {
-  //   if (value === "New Password") {
-  //     setShowPassword(!showPassword);
-  //   }
-  //   if (value === "Confirm Password") {
-  //     setShowConfirmPassword(!showConfirmPassword);
-  //   }
-  // };
 
   const handleChange = (field, value) => {
     setFormData({ ...formData, [field]: value });
@@ -70,13 +61,20 @@ const ResetPassword = ({ size, Default, onChange, handleSnackbarClose }) => {
           onChange={(e) => handleChange("password", e.target.value)}
           InputProps={{
             endAdornment: (
-              <IconButton onClick={() => setShowPassword(!showPassword)}>
-                {showPassword ? (
-                  <Visibility style={{ color: "#016699" }} />
-                ) : (
-                  <VisibilityOff style={{ color: "#016699" }} />
-                )}
-              </IconButton>
+              <Tooltip
+                title={showPassword ? "Hide New Password" : "Show New Password"}
+                enterDelay={500}
+                leaveDelay={200}
+                arrow
+              >
+                <IconButton onClick={() => setShowPassword(!showPassword)}>
+                  {showPassword ? (
+                    <Visibility style={{ color: "#016699" }} />
+                  ) : (
+                    <VisibilityOff style={{ color: "#016699" }} />
+                  )}
+                </IconButton>
+              </Tooltip>
             ),
           }}
         />
@@ -91,15 +89,26 @@ const ResetPassword = ({ size, Default, onChange, handleSnackbarClose }) => {
           InputProps={{
             // Use InputProps here
             endAdornment: (
-              <IconButton
-                onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+              <Tooltip
+                title={
+                  showPassword
+                    ? "Hide Confirm Password"
+                    : "Show Confirm Password"
+                }
+                enterDelay={500}
+                leaveDelay={200}
+                arrow
               >
-                {showConfirmPassword ? (
-                  <Visibility style={{ color: "#016699" }} />
-                ) : (
-                  <VisibilityOff style={{ color: "#016699" }} />
-                )}
-              </IconButton>
+                <IconButton
+                  onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                >
+                  {showConfirmPassword ? (
+                    <Visibility style={{ color: "#016699" }} />
+                  ) : (
+                    <VisibilityOff style={{ color: "#016699" }} />
+                  )}
+                </IconButton>
+              </Tooltip>
             ),
           }}
         />

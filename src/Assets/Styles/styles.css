@@ -106,7 +106,7 @@
 
 .App-bar {
     height: 70px;
-    padding: 20px;
+    padding: 20px 25px;
     flex-direction: row !important;
     justify-content: space-between;
     align-items: center;
@@ -803,8 +803,30 @@ input:disabled {
     -webkit-text-fill-color: black !important;
 } */
 
+.Main_Profile_container {
+    opacity: 0;
+    transition: all 2s ease-in-out;
+}
+
+.Animation {
+    opacity: 0;
+    animation: dragFromPoint 1s ease-out forwards;
+}
+
+@keyframes dragFromPoint {
+    0% {
+        transform: scale(0.5);
+        opacity: 0;
+    }
+
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
 
 .profile-container {
+    transition: all 2s ease-in-out;
     align-items: center;
     background-color: #f8f8f8;
     border-radius: 10px;
@@ -1032,10 +1054,9 @@ input:disabled {
 }
 
 .Top_Bar_Heading {
-    font-size: 18px;
-    font-weight: 500;
-    color: #333;
-    text-transform: capitalize;
+    color: #595959;
+    font-size: 24px;
+    font-weight: 600;
 }
 
 .Profile-Icon-Link {
